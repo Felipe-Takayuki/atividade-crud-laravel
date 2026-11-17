@@ -82,7 +82,7 @@ Acesse no navegador: **http://127.0.0.1:8000**
 
 A segunda feature da atividade é implementar o **CRUD completo de Tarefas (`Task`)** pertencentes ao usuário autenticado.
 
-### O que já deixamos preparado para você
+### O que já está preparado
 - **Migration:** `database/migrations/2026_11_17_020142_create_tasks_table.php` (já migrada no SQLite).
 - **Model `Task`:** `app/Models/Task.php` com `$fillable`, `casts()` para `due_date` e relacionamento `belongsTo(User::class)`.
 - **Model `User`:** `app/Models/User.php` atualizado com o relacionamento `hasMany(Task::class)`.
@@ -90,7 +90,7 @@ A segunda feature da atividade é implementar o **CRUD completo de Tarefas (`Tas
 - **Controller Stub:** `app/Http/Controllers/TaskController.php` com todos os 7 métodos (`index`, `create`, `store`, `show`, `edit`, `update`, `destroy`) e comentários `TODO`.
 - **Views Stubs:** `resources/views/tasks/` (`index.blade.php`, `create.blade.php`, `edit.blade.php`, `show.blade.php`).
 
-### Passo a Passo do que Você Deve Implementar
+### Passo a Passo do que implementar
 
 1. **Listagem (`TaskController@index` + `resources/views/tasks/index.blade.php`)**
    - Substituir o mockup estático pela busca real:
