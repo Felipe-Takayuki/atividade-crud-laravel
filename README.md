@@ -78,7 +78,7 @@ Acesse no navegador: **http://127.0.0.1:8000**
 
 ---
 
-## Tarefa do Colega — CRUD 2 (Gestão de Tarefas / Tasks)
+## Tarefa CRUD 2 (Gestão de Tarefas / Tasks)
 
 A segunda feature da atividade é implementar o **CRUD completo de Tarefas (`Task`)** pertencentes ao usuário autenticado.
 
