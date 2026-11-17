@@ -4,18 +4,18 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-        <div class="flex items-center justify-between mb-6">
+    <div class="bg-white rounded-lg border border-zinc-200 p-6">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-zinc-100">
             <div>
-                <h1 class="text-xl font-bold text-slate-900">Detalhes da Tarefa</h1>
-                <p class="text-sm text-slate-500 mt-1">Stub preparado para o CRUD 2 (ver README.md).</p>
+                <h1 class="text-lg font-semibold text-zinc-900">Detalhes da tarefa</h1>
+                <p class="text-sm text-zinc-500 mt-0.5">Stub preparado para o CRUD 2 (ver README.md).</p>
             </div>
-            <a href="{{ route('tasks.index') }}" class="text-sm font-medium text-slate-600 hover:text-slate-900">
+            <a href="{{ route('tasks.index') }}" class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
                 &larr; Voltar
             </a>
         </div>
 
-        <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+        <div class="rounded-md border border-zinc-200 bg-zinc-50 p-4 text-sm text-zinc-700">
             <strong>Guia para o colega:</strong> Exiba aqui os detalhes completos da variável <code>$task</code> (título, descrição, status, prioridade, prazo e botões para editar/excluir).
         </div>
 

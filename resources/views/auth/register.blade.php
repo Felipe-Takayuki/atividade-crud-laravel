@@ -3,18 +3,18 @@
 @section('title', 'Criar Conta')
 
 @section('content')
-<div class="max-w-md mx-auto mt-4">
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-slate-900">Criar nova conta</h1>
-            <p class="text-sm text-slate-500 mt-1">Preencha os dados abaixo para começar a usar o TaskFlow.</p>
-        </div>
+<div class="max-w-sm mx-auto mt-8">
+    <div class="mb-6">
+        <h1 class="text-xl font-semibold text-zinc-900 tracking-tight">Criar conta</h1>
+        <p class="text-sm text-zinc-500 mt-1">Preencha seus dados para começar.</p>
+    </div>
 
+    <div class="bg-white rounded-lg border border-zinc-200 p-6">
         <form method="POST" action="{{ route('register.store') }}" class="space-y-4">
             @csrf
 
             <div>
-                <label for="name" class="block text-sm font-medium text-slate-700 mb-1.5">Nome completo</label>
+                <label for="name" class="block text-sm font-medium text-zinc-700 mb-1">Nome</label>
                 <input id="name"
                        type="text"
                        name="name"
@@ -23,14 +23,14 @@
                        autofocus
                        autocomplete="name"
                        placeholder="Seu nome"
-                       class="w-full rounded-xl border @error('name') border-rose-400 focus:ring-rose-500 @else border-slate-300 focus:ring-indigo-500 @enderror px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:border-transparent transition">
+                       class="w-full rounded-md border @error('name') border-red-400 focus:border-red-500 focus:ring-red-500 @else border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 @enderror px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-1 transition">
                 @error('name')
-                    <p class="mt-1.5 text-xs text-rose-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="email" class="block text-sm font-medium text-slate-700 mb-1.5">E-mail</label>
+                <label for="email" class="block text-sm font-medium text-zinc-700 mb-1">E-mail</label>
                 <input id="email"
                        type="email"
                        name="email"
@@ -38,49 +38,49 @@
                        required
                        autocomplete="email"
                        placeholder="voce@exemplo.com"
-                       class="w-full rounded-xl border @error('email') border-rose-400 focus:ring-rose-500 @else border-slate-300 focus:ring-indigo-500 @enderror px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:border-transparent transition">
+                       class="w-full rounded-md border @error('email') border-red-400 focus:border-red-500 focus:ring-red-500 @else border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 @enderror px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-1 transition">
                 @error('email')
-                    <p class="mt-1.5 text-xs text-rose-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="password" class="block text-sm font-medium text-slate-700 mb-1.5">Senha</label>
+                <label for="password" class="block text-sm font-medium text-zinc-700 mb-1">Senha</label>
                 <input id="password"
                        type="password"
                        name="password"
                        required
                        autocomplete="new-password"
-                       placeholder="Mínimo de 8 caracteres"
-                       class="w-full rounded-xl border @error('password') border-rose-400 focus:ring-rose-500 @else border-slate-300 focus:ring-indigo-500 @enderror px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:border-transparent transition">
+                       placeholder="Mínimo 8 caracteres"
+                       class="w-full rounded-md border @error('password') border-red-400 focus:border-red-500 focus:ring-red-500 @else border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 @enderror px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-1 transition">
                 @error('password')
-                    <p class="mt-1.5 text-xs text-rose-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="password_confirmation" class="block text-sm font-medium text-slate-700 mb-1.5">Confirmar senha</label>
+                <label for="password_confirmation" class="block text-sm font-medium text-zinc-700 mb-1">Confirmar senha</label>
                 <input id="password_confirmation"
                        type="password"
                        name="password_confirmation"
                        required
                        autocomplete="new-password"
                        placeholder="Repita a senha"
-                       class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                       class="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
             </div>
 
             <button type="submit"
-                    class="w-full mt-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 text-sm shadow-sm transition cursor-pointer">
-                Cadastrar e entrar
+                    class="w-full rounded-md bg-zinc-900 hover:bg-zinc-800 text-white font-medium py-2 px-4 text-sm transition cursor-pointer">
+                Criar conta
             </button>
         </form>
-
-        <div class="mt-6 pt-6 border-t border-slate-100 text-center text-sm text-slate-600">
-            Já possui uma conta?
-            <a href="{{ route('login') }}" class="font-semibold text-indigo-600 hover:text-indigo-700">
-                Fazer login
-            </a>
-        </div>
     </div>
+
+    <p class="mt-4 text-center text-sm text-zinc-500">
+        Já tem conta?
+        <a href="{{ route('login') }}" class="font-medium text-zinc-900 underline underline-offset-4 hover:text-zinc-700">
+            Entrar
+        </a>
+    </p>
 </div>
 @endsection

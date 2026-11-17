@@ -1,4 +1,4 @@
-# TaskFlow — Atividade Prática de CRUDs em Laravel
+# Tasks — Atividade Prática de CRUDs em Laravel
 
 Sistema de gerenciamento pessoal de tarefas desenvolvido em **Laravel 13** com **SQLite** e **Tailwind CSS (via CDN)**.
 O projeto foi estruturado em **duas features (CRUDs) independentes e integradas** para trabalho em dupla:

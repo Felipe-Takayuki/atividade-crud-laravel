@@ -3,18 +3,18 @@
 @section('title', 'Entrar')
 
 @section('content')
-<div class="max-w-md mx-auto mt-6">
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-slate-900">Entrar no TaskFlow</h1>
-            <p class="text-sm text-slate-500 mt-1">Acesse sua conta para gerenciar seu perfil e tarefas.</p>
-        </div>
+<div class="max-w-sm mx-auto mt-10">
+    <div class="mb-6">
+        <h1 class="text-xl font-semibold text-zinc-900 tracking-tight">Entrar</h1>
+        <p class="text-sm text-zinc-500 mt-1">Informe seu e-mail e senha para acessar sua conta.</p>
+    </div>
 
-        <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
+    <div class="bg-white rounded-lg border border-zinc-200 p-6">
+        <form method="POST" action="{{ route('login.store') }}" class="space-y-4">
             @csrf
 
             <div>
-                <label for="email" class="block text-sm font-medium text-slate-700 mb-1.5">E-mail</label>
+                <label for="email" class="block text-sm font-medium text-zinc-700 mb-1">E-mail</label>
                 <input id="email"
                        type="email"
                        name="email"
@@ -23,49 +23,49 @@
                        autofocus
                        autocomplete="email"
                        placeholder="voce@exemplo.com"
-                       class="w-full rounded-xl border @error('email') border-rose-400 focus:ring-rose-500 @else border-slate-300 focus:ring-indigo-500 @enderror px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:border-transparent transition">
+                       class="w-full rounded-md border @error('email') border-red-400 focus:border-red-500 focus:ring-red-500 @else border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 @enderror px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-1 transition">
                 @error('email')
-                    <p class="mt-1.5 text-xs text-rose-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="password" class="block text-sm font-medium text-slate-700 mb-1.5">Senha</label>
+                <label for="password" class="block text-sm font-medium text-zinc-700 mb-1">Senha</label>
                 <input id="password"
                        type="password"
                        name="password"
                        required
                        autocomplete="current-password"
                        placeholder="••••••••"
-                       class="w-full rounded-xl border @error('password') border-rose-400 focus:ring-rose-500 @else border-slate-300 focus:ring-indigo-500 @enderror px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:border-transparent transition">
+                       class="w-full rounded-md border @error('password') border-red-400 focus:border-red-500 focus:ring-red-500 @else border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 @enderror px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-1 transition">
                 @error('password')
-                    <p class="mt-1.5 text-xs text-rose-600">{{ $message }}</p>
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="flex items-center justify-between">
-                <label class="inline-flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+            <div class="flex items-center">
+                <label class="inline-flex items-center gap-2 text-sm text-zinc-600 cursor-pointer">
                     <input type="checkbox"
                            name="remember"
                            value="1"
                            {{ old('remember') ? 'checked' : '' }}
-                           class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                           class="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900">
                     <span>Manter conectado</span>
                 </label>
             </div>
 
             <button type="submit"
-                    class="w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 text-sm shadow-sm transition cursor-pointer">
+                    class="w-full rounded-md bg-zinc-900 hover:bg-zinc-800 text-white font-medium py-2 px-4 text-sm transition cursor-pointer">
                 Entrar
             </button>
         </form>
-
-        <div class="mt-6 pt-6 border-t border-slate-100 text-center text-sm text-slate-600">
-            Ainda não tem uma conta?
-            <a href="{{ route('register') }}" class="font-semibold text-indigo-600 hover:text-indigo-700">
-                Criar conta gratuitamente
-            </a>
-        </div>
     </div>
+
+    <p class="mt-4 text-center text-sm text-zinc-500">
+        Não tem conta?
+        <a href="{{ route('register') }}" class="font-medium text-zinc-900 underline underline-offset-4 hover:text-zinc-700">
+            Criar uma agora
+        </a>
+    </p>
 </div>
 @endsection
