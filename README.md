@@ -4,7 +4,7 @@ Sistema de gerenciamento pessoal de tarefas desenvolvido em **Laravel 13** com *
 O projeto foi estruturado em **duas features (CRUDs) independentes e integradas** para trabalho em dupla:
 
 - **CRUD 1 (Concluído 100%):** Autenticação e Gestão da Conta do Usuário (`RegisterController`, `AuthController`, `ProfileController`).
-- **CRUD 2 (Atividade do Colega):** Gestão de Tarefas (`TaskController`, Model `Task`, Views em `resources/views/tasks/`).
+- **CRUD 2 (Concluído 100%):** Gestão de Tarefas (`TaskController`, Model `Task`, Views em `resources/views/tasks/`).
 
 ---
 
@@ -47,7 +47,7 @@ Acesse no navegador: **http://127.0.0.1:8000**
 - `password` (hashed)
 - `remember_token`, `timestamps`
 
-### Tabela `tasks` (Pronta para o CRUD 2)
+### Tabela `tasks`
 - `id` (PK)
 - `user_id` (FK -> `users.id` com `cascadeOnDelete()`)
 - `title` (string)
@@ -68,7 +68,7 @@ Acesse no navegador: **http://127.0.0.1:8000**
 2. **Create (Registro de Conta)**
    - `GET /register` e `POST /register`: Validação de nome, e-mail único e senha confirmada (mínimo 8 caracteres), criação do usuário e auto-login.
 3. **Read (Visualização de Perfil / Dashboard)**
-   - `GET /profile`: Exibe os dados da conta autenticada, data de cadastro e resumo da contagem de tarefas.
+   - `GET /profile`: Exibe os dados da conta autenticada, data de cadastro e resumo da contagem de tarefas vinculadas.
 4. **Update (Edição de Dados e Senha)**
    - `GET /profile/edit`: Tela de configurações da conta.
    - `PATCH /profile`: Atualização de nome e e-mail (validando unicidade ignorando o próprio usuário).
@@ -78,68 +78,43 @@ Acesse no navegador: **http://127.0.0.1:8000**
 
 ---
 
-## Tarefa CRUD 2 (Gestão de Tarefas / Tasks)
+## O que Foi Implementado — CRUD 2 (Gestão de Tarefas)
 
-A segunda feature da atividade é implementar o **CRUD completo de Tarefas (`Task`)** pertencentes ao usuário autenticado.
+O CRUD completo de tarefas (`Task`) pertencentes ao usuário autenticado foi totalmente implementado utilizando as 7 ações resource:
 
-### O que já está preparado
-- **Migration:** `database/migrations/2026_11_17_020142_create_tasks_table.php` (já migrada no SQLite).
-- **Model `Task`:** `app/Models/Task.php` com `$fillable`, `casts()` para `due_date` e relacionamento `belongsTo(User::class)`.
-- **Model `User`:** `app/Models/User.php` atualizado com o relacionamento `hasMany(Task::class)`.
-- **Rotas:** `Route::resource('tasks', TaskController::class);` já registrada em `routes/web.php` dentro do grupo `middleware('auth')`.
-- **Controller Stub:** `app/Http/Controllers/TaskController.php` com todos os 7 métodos (`index`, `create`, `store`, `show`, `edit`, `update`, `destroy`) e comentários `TODO`.
-- **Views Stubs:** `resources/views/tasks/` (`index.blade.php`, `create.blade.php`, `edit.blade.php`, `show.blade.php`).
+1. **Listagem (`GET /tasks` &rarr; `TaskController@index` + `resources/views/tasks/index.blade.php`)**
+   - Busca real no banco apenas das tarefas do usuário autenticado: `Auth::user()->tasks()->latest()->get()`.
+   - Exibição de cada tarefa com badges coloridos para `status` (`pending`, `in_progress`, `completed`) e `priority` (`low`, `medium`, `high`).
+   - Apresentação de descrição, prazo formatado (`d/m/Y`) e data de cadastro.
+   - Botões de ação rápida para cada registro: **Ver**, **Editar** e **Excluir** (com formulário `@method('DELETE')` + `@csrf` e confirmação antes de excluir).
+   - Estado vazio (*empty state*) intuitivo caso o usuário ainda não possua tarefas.
 
-### Passo a Passo do que implementar
+2. **Criação (`GET /tasks/create` e `POST /tasks` &rarr; `TaskController@create` e `store` + `resources/views/tasks/create.blade.php`)**
+   - Formulário com `@csrf` apontando para `route('tasks.store')`.
+   - Validação completa no controller (`title`, `description`, `status`, `priority`, `due_date`).
+   - Persistência vinculada ao usuário autenticado via relacionamento: `Auth::user()->tasks()->create($validated)`.
+   - Redirecionamento para a listagem com mensagem flash de sucesso.
 
-1. **Listagem (`TaskController@index` + `resources/views/tasks/index.blade.php`)**
-   - Substituir o mockup estático pela busca real:
-     ```php
-     $tasks = Auth::user()->tasks()->latest()->get();
-     return view('tasks.index', compact('tasks'));
-     ```
-   - Exibir cada tarefa em uma lista/tabela com badges coloridos de `status` e `priority`, além dos botões **Ver**, **Editar** e **Excluir** (com `<form method="POST">` + `@method('DELETE')` + `@csrf`).
+3. **Detalhes (`GET /tasks/{task}` &rarr; `TaskController@show` + `resources/views/tasks/show.blade.php`)**
+   - Verificação de propriedade e segurança contra IDOR (`abort_if($task->user_id !== Auth::id(), 403);`).
+   - Exibição de título, status, prioridade, descrição completa, prazo e datas de criação e última atualização.
+   - Acesso direto às opções de edição e exclusão da tarefa.
 
-2. **Criação (`TaskController@create` e `TaskController@store` + `resources/views/tasks/create.blade.php`)**
-   - Montar o formulário em `create.blade.php` apontando para `route('tasks.store')`.
-   - No método `store`, validar os dados e salvar via relacionamento:
-     ```php
-     $validated = $request->validate([
-         'title'       => ['required', 'string', 'max:255'],
-         'description' => ['nullable', 'string'],
-         'status'      => ['required', 'in:pending,in_progress,completed'],
-         'priority'    => ['required', 'in:low,medium,high'],
-         'due_date'    => ['nullable', 'date'],
-     ]);
+4. **Edição (`GET /tasks/{task}/edit` e `PUT /tasks/{task}` &rarr; `TaskController@edit` e `update` + `resources/views/tasks/edit.blade.php`)**
+   - Verificação de propriedade (`abort_if`).
+   - Formulário pré-preenchido utilizando `@method('PUT')`, `@csrf` e `old('campo', $task->campo)`.
+   - Validação dos dados, execução de `$task->update($validated)` e redirecionamento com mensagem de sucesso.
 
-     Auth::user()->tasks()->create($validated);
-
-     return redirect()->route('tasks.index')->with('success', 'Tarefa criada com sucesso!');
-     ```
-
-3. **Detalhes (`TaskController@show` + `resources/views/tasks/show.blade.php`)**
-   - Garantir que o usuário só veja suas próprias tarefas (`abort_if($task->user_id !== Auth::id(), 403);`).
-   - Exibir título, descrição completa, status, prioridade, prazo e datas de criação/atualização.
-
-4. **Edição (`TaskController@edit` e `TaskController@update` + `resources/views/tasks/edit.blade.php`)**
-   - Verificar propriedade (`abort_if($task->user_id !== Auth::id(), 403);`).
-   - Montar o formulário em `edit.blade.php` usando `@method('PUT')` e `old('campo', $task->campo)`.
-   - Validar e chamar `$task->update($validated);`, redirecionando com mensagem de sucesso.
-
-5. **Exclusão (`TaskController@destroy`)**
-   - Verificar propriedade (`abort_if($task->user_id !== Auth::id(), 403);`).
-   - Executar `$task->delete();` e redirecionar para `route('tasks.index')` com `session('success')`.
-
-### Ideias Bônus (Opcional)
-- Filtro por `status` e `priority` na listagem (`?status=pending`).
-- Botão rápido para marcar tarefa como `completed` diretamente na listagem.
-- Testes automatizados em `tests/Feature/TaskCrudTest.php`.
+5. **Exclusão (`DELETE /tasks/{task}` &rarr; `TaskController@destroy`)**
+   - Verificação de propriedade (`abort_if`).
+   - Exclusão do registro via `$task->delete()`.
+   - Redirecionamento para a listagem com feedback de confirmação (`session('success')`).
 
 ---
 
 ## Testes Automatizados
 
-Para rodar a suíte de testes do CRUD 1:
+Para rodar a suíte de testes do projeto:
 
 ```bash
 php artisan test
