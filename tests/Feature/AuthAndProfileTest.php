@@ -143,13 +143,13 @@ class AuthAndProfileTest extends TestCase
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
     }
 
-    public function test_authenticated_user_can_view_tasks_construction_page(): void
+    public function test_authenticated_user_can_view_tasks_index_page(): void
     {
         $user = User::factory()->create();
 
         $this->actingAs($user)
             ->get('/tasks')
             ->assertOk()
-            ->assertSee('Área em Construção pelo seu colega de equipe!');
+            ->assertSee('Minhas tarefas');
     }
 }
