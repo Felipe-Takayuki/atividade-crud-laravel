@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return Auth::check()
-        ? redirect()->route('profile.show')
+        ? redirect()->route('tasks.show')
         : redirect()->route('login');
 })->name('home');
 
@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // CRUD 2: Gestão de Tarefas (Atividade para o colega implementar)
+    // CRUD 2: Gestão de Tarefas
     // Gera automaticamente as 7 rotas resource: tasks.index, tasks.create,
     // tasks.store, tasks.show, tasks.edit, tasks.update e tasks.destroy.
     Route::resource('tasks', TaskController::class);

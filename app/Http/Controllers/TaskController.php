@@ -6,10 +6,11 @@ use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /**
- * CRUD 2: Gestão de Tarefas (Atividade do Colega)
+ * CRUD 2: Gestão de Tarefas
  *
  * Conectado às rotas resource em routes/web.php.
  * Implementa o CRUD completo de Tarefas vinculadas ao usuário autenticado.
@@ -39,15 +40,7 @@ class TaskController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status'      => ['required', 'in:pending,in_progress,completed'],
-            'priority'    => ['required', 'in:low,medium,high'],
-            'due_date'    => ['nullable', 'date'],
-        ]);
-
-        Auth::user()->tasks()->create($validated);
+        Auth::user()->tasks()->create($this->validateTask($request));
 
         return redirect()->route('tasks.index')->with('success', 'Tarefa criada com sucesso!');
     }
@@ -57,7 +50,7 @@ class TaskController extends Controller
      */
     public function show(Task $task): View
     {
-        abort_if($task->user_id !== Auth::id(), 403);
+        $this->authorizeTask($task);
 
         return view('tasks.show', compact('task'));
     }
@@ -67,7 +60,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task): View
     {
-        abort_if($task->user_id !== Auth::id(), 403);
+        $this->authorizeTask($task);
 
         return view('tasks.edit', compact('task'));
     }
@@ -77,17 +70,9 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task): RedirectResponse
     {
-        abort_if($task->user_id !== Auth::id(), 403);
+        $this->authorizeTask($task);
 
-        $validated = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status'      => ['required', 'in:pending,in_progress,completed'],
-            'priority'    => ['required', 'in:low,medium,high'],
-            'due_date'    => ['nullable', 'date'],
-        ]);
-
-        $task->update($validated);
+        $task->update($this->validateTask($request));
 
         return redirect()->route('tasks.index')->with('success', 'Tarefa atualizada com sucesso!');
     }
@@ -97,10 +82,34 @@ class TaskController extends Controller
      */
     public function destroy(Task $task): RedirectResponse
     {
-        abort_if($task->user_id !== Auth::id(), 403);
+        $this->authorizeTask($task);
 
         $task->delete();
 
         return redirect()->route('tasks.index')->with('success', 'Tarefa excluída com sucesso!');
+    }
+
+    /**
+     * Garante que a tarefa pertence ao usuário autenticado.
+     */
+    private function authorizeTask(Task $task): void
+    {
+        abort_if($task->user_id !== Auth::id(), 403);
+    }
+
+    /**
+     * Valida os campos do formulário de tarefa.
+     *
+     * @return array<string, mixed>
+     */
+    private function validateTask(Request $request): array
+    {
+        return $request->validate([
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'status'      => ['required', Rule::in(array_keys(Task::STATUSES))],
+            'priority'    => ['required', Rule::in(array_keys(Task::PRIORITIES))],
+            'due_date'    => ['nullable', 'date'],
+        ]);
     }
 }

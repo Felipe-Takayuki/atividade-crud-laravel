@@ -4,18 +4,8 @@
 
 @section('content')
 @php
-    $statusMap = [
-        'pending'     => ['label' => 'Pendente',     'class' => 'bg-zinc-100 text-zinc-700 border-zinc-200'],
-        'in_progress' => ['label' => 'Em andamento', 'class' => 'bg-amber-50 text-amber-700 border-amber-200'],
-        'completed'   => ['label' => 'Concluída',    'class' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-    ];
-    $priorityMap = [
-        'low'    => ['label' => 'Baixa', 'class' => 'bg-zinc-100 text-zinc-600 border-zinc-200'],
-        'medium' => ['label' => 'Média', 'class' => 'bg-blue-50 text-blue-700 border-blue-200'],
-        'high'   => ['label' => 'Alta',  'class' => 'bg-red-50 text-red-700 border-red-200'],
-    ];
-    $statusInfo = $statusMap[$task->status] ?? ['label' => ucfirst($task->status), 'class' => 'bg-zinc-100 text-zinc-700 border-zinc-200'];
-    $priorityInfo = $priorityMap[$task->priority] ?? ['label' => ucfirst($task->priority), 'class' => 'bg-zinc-100 text-zinc-600 border-zinc-200'];
+    $statusInfo = $task->statusBadge();
+    $priorityInfo = $task->priorityBadge();
 @endphp
 
 <div class="max-w-2xl mx-auto space-y-6">

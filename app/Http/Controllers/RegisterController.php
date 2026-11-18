@@ -51,6 +51,6 @@ class RegisterController extends Controller
 
         return redirect()
             ->route('profile.show')
-            ->with('success', 'Conta criada com sucesso! Bem-vindo(a) ao TaskFlow.');
+            ->with('success', 'Conta criada com sucesso! Bem-vindo(a) ao Tasks.');
     }
 }
